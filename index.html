@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Bar Chart</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #282c34;
+        margin: 0;
+        color: white;
+      }
+
+      .bars {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        height: 300px;
+        align-items: flex-end;
+        position: relative;
+      }
+
+      .bar {
+        width: 15%;
+        height: 100%; 
+        transition: height 0.5s ease; 
+      }
+
+      
+      #bar1 {
+        background-color: #7c47cf;
+      }
+      #bar2 {
+        background-color: #d852aa;
+      }
+      #bar3 {
+        background-color: #fc5c85;
+      }
+      #bar4 {
+        background-color: #fc9053;
+      }
+      #bar5 {
+        background-color: #f2cc52;
+      }
+
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 25px;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        color: black;
+      }
+
+      #startButton {
+        background-color: green;
+      }
+
+      #stopButton {
+        background-color: red;
+      }
+
+      #resetButton {
+        background-color: purple;
+      }
+
+      button:hover {
+        opacity: 0.8; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bars">
+      <div class="bar" id="bar1"></div>
+      <div class="bar" id="bar2"></div>
+      <div class="bar" id="bar3"></div>
+      <div class="bar" id="bar4"></div>
+      <div class="bar" id="bar5"></div>
+    </div>
+    <div class="buttons">
+      <button id="startButton">Start</button>
+      <button id="resetButton" disabled>Reset</button>
+      <button id="stopButton" disabled>Stop</button>
+    </div>
+    <script>
+      let intervalId;
+
+      function getRandomHeight() {
+        return Math.floor(Math.random() * 101); // Random height between 0 and 100%
+      }
+
+      function animateBars() {
+        const bars = document.querySelectorAll(".bar");
+        bars.forEach((bar) => {
+          bar.style.height = getRandomHeight() + "%"; // Set random height
+        });
+      }
+
+      document
+        .getElementById("startButton")
+        .addEventListener("click", function () {
+          if (!intervalId) {
+            console.log("clicking to reset button");
+            intervalId = setInterval(animateBars, 500); // Change height every 500ms
+            this.disabled = true; // Disable start button
+            document.getElementById("stopButton").disabled = false; // Enable stop button
+            document.getElementById("resetButton").disabled = false; // Disable reset button
+          }
+        });
+
+      document
+        .getElementById("stopButton")
+        .addEventListener("click", function () {
+          console.log("clicking to stop button");
+          clearInterval(intervalId); // Stop the animation
+          intervalId = null; // Reset intervalId
+          this.disabled = true; // Disable stop button
+          document.getElementById("startButton").disabled = false; // Enable start button
+          document.getElementById("resetButton").disabled = false; // Enable reset button
+        });
+
+      document
+        .getElementById("resetButton")
+        .addEventListener("click", function () {
+          console.log("clicking to reset button");
+          clearInterval(intervalId); // Stop the animation
+          intervalId = null; // Reset intervalId
+          const bars = document.querySelectorAll(".bar");
+          bars.forEach((bar) => {
+            bar.style.height = "100%"; // Reset height to 100% 
+          });
+          this.disabled = true; // Disable reset button
+          document.getElementById("startButton").disabled = false; // Enable start button
+          document.getElementById("stopButton").disabled = true; // Disable stop button
+        });
+
+      // Initialize bars to full height on page load
+      window.onload = function () {
+        const bars = document.querySelectorAll(".bar");
+        bars.forEach((bar) => {
+          bar.style.height = "100%"; // Set initial height to 100%
+        });
+      };
+    </script>
+  </body>
+</html>
